@@ -71,5 +71,5 @@ You can perform this copy using the Cloud Shell within the Azure Portal. Follow 
 3. Verify the copy has completed by navigating to the destination container using the Azure Portal. In the container list, select the ellipses and then Container properties. If your ouput matches the following, all of the files have been copied over:
 
     Container Size
-    * Blob Count: 2442
-    * Size: 9.7 GiB
+    * Blob Count: 3202
+    * Size: 12.02 GiB
