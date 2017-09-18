@@ -9,7 +9,13 @@ An ARM template and script is provided to aid in provisioning the clusters for a
 1. Navigate to the Setup\Scripts folder. 
 2. Open azuredeploy.parameters.json and provide the settings requested. At minimum provide a unique name for the cluster.
 3. Save the file.
-4. Run the following command to provision the cluster.
+4. Open PowerShell and run the following command to login to your Azure account:
+
+    ```
+    Login-AzureRmAccount
+    ```
+
+4. Run the following command to provision the cluster:
 
     ```
     .\Deploy-AzureResourceGroup.ps1 -StorageAccountName '' -ResourceGroupName 'HDInsightLabsEnvironment-01' -ResourceGroupLocation 'westus2' -TemplateFile 'azuredeploy.json' -TemplateParametersFile 'azuredeploy.parameters.json' -ArtifactStagingDirectory '.' -DSCSourceFolder '.\DSC'
