@@ -15,10 +15,10 @@ An ARM template and script is provided to aid in provisioning the clusters for a
     Login-AzureRmAccount
     ```
 
-4. Run the following command to provision the cluster:
+4. Run the following command to provision the cluster (be sure to provide a unique cluster name):
 
     ```
-    .\Deploy-AzureResourceGroup.ps1 -StorageAccountName '' -ResourceGroupName 'HDInsightLabsEnvironment-01' -ResourceGroupLocation 'westus2' -TemplateFile 'azuredeploy.json' -TemplateParametersFile 'azuredeploy.parameters.json' -ArtifactStagingDirectory '.' -DSCSourceFolder '.\DSC'
+    .\Deploy-AzureResourceGroup.ps1 -ResourceGroupName 'HDInsightLabsEnvironment-01' -ResourceGroupLocation 'westus2' -TemplateFile 'azuredeploy.json' -TemplateParametersFile 'azuredeploy.parameters.json' -ClusterName "[clustername]"
     ```
 
     **NOTE:** You may need to relax your PowerShell execution policy to execute this script. To do so, before running the above first run:

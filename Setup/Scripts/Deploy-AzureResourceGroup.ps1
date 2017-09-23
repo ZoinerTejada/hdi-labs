@@ -2,6 +2,7 @@
 
 Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
+    [string] [Parameter(Mandatory=$true)] $ClusterName,
     [string] $ResourceGroupName = 'HDInsightLabsEnvironment',
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
@@ -109,6 +110,7 @@ else {
                                        -ResourceGroupName $ResourceGroupName `
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
+                                       -clusterName $ClusterName `
                                        @OptionalParameters `
                                        -Force -Verbose `
                                        -ErrorVariable ErrorMessages
