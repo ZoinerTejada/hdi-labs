@@ -67,9 +67,11 @@ You can perform this copy using the Cloud Shell within the Azure Portal. Follow 
 1. Log in to the Azure Portal, and launch the Cloud Shell using the button in the top right corner.
 2. Within the Cloud Shell run the following command to copy the dataset from the source location to your cluster's storage account. Observe that no account-key is required for the source because the source account is public/read-only and is accessed with a SAS token. **NOTE: This kicks off a background copy, while the command below will complete in 2-3 minutes, the actual copying of all files takes about 20-30 minutes**.
 
-    **HINT: append the ```--dryrun``` parameter to the below to preview the copy to make sure it is configured as intended.
+    **HINT: add the ```--dryrun``` parameter to the below (before the --source-sas parameter) to preview the copy to make sure it is configured as intended.
 
     ```
+    az storage container create -n hdi-labs --account-name [DestinationAccountName] --account-key [DestinationAccountKey]
+
     az storage blob copy start-batch --source-account-name retaildatasamples --source-container data   --account-name [DestinationAccountName] --account-key [DestinationAccountKey]  --destination-container hdi-labs --pattern retaildata/rawdata* --source-sas ?sv=2017-04-17&ss=b&srt=co&sp=rl&se=2019-12-31T18:29:33Z&st=2017-09-18T10:29:33Z&spr=https&sig=bw1EJflDFx9NuvLRdBGql8RU%2FC9oz92Dz8Xs76cftJM%3D
 
     ```
