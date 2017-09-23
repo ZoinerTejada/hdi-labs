@@ -70,7 +70,7 @@ You can perform this copy using the Cloud Shell within the Azure Portal. Follow 
     **HINT: append the ```--dryrun``` parameter to the below to preview the copy to make sure it is configured as intended.
 
     ```
-    az storage blob copy start-batch --source-account-name retaildatasamples --source-container data   --account-name [DestinationAccountName] --account-key [DestinationAccountKey]  --destination-container hdi-labs --pattern retaildata/rawdata* --sas-token ?sv=2017-04-17&ss=b&srt=co&sp=rl&se=2019-12-31T18:29:33Z&st=2017-09-18T10:29:33Z&spr=https&sig=bw1EJflDFx9NuvLRdBGql8RU%2FC9oz92Dz8Xs76cftJM%3D
+    az storage blob copy start-batch --source-account-name retaildatasamples --source-container data   --account-name [DestinationAccountName] --account-key [DestinationAccountKey]  --destination-container hdi-labs --pattern retaildata/rawdata* --source-sas ?sv=2017-04-17&ss=b&srt=co&sp=rl&se=2019-12-31T18:29:33Z&st=2017-09-18T10:29:33Z&spr=https&sig=bw1EJflDFx9NuvLRdBGql8RU%2FC9oz92Dz8Xs76cftJM%3D
 
     ```
 
