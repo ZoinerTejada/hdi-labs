@@ -111,6 +111,7 @@ else {
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
                                        -clusterName $ClusterName `
+                                       -location $ResourceGroupLocation `
                                        @OptionalParameters `
                                        -Force -Verbose `
                                        -ErrorVariable ErrorMessages
