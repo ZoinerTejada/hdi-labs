@@ -1,8 +1,16 @@
-﻿$subscriptionId = 'e223f1b3-d19b-4cfa-98e9-bc9be62717bc'
-$resourceGroupName = 'HDInsightLabsEnvironmentZ'
-$resourceGroupLocation = 'westus2'
-$clusterName = 'hdilabsz1'
-$numInstances = 2
+﻿Param(
+    [string] [Parameter(Mandatory=$true)] $subscriptionId,
+    [string] [Parameter(Mandatory=$true)] $resourceGroupName,
+    [string] [Parameter(Mandatory=$true)] $clusterName,
+    [string] [Parameter(Mandatory=$true)] $numInstances,
+    [string] $resourceGroupLocation = 'eastus'
+)
+
+#$subscriptionId = 'e223f1b3-d19b-4cfa-98e9-bc9be62717bc'
+#$resourceGroupName = 'HDInsightLabsEnvironmentZ'
+#$resourceGroupLocation = 'westus2'
+#$clusterName = 'hdilabsz1'
+#$numInstances = 2
 
 $destContainerName = "hdi-labs"
 $sourceFolder = Get-Location
