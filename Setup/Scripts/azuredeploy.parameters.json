@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterName": {
-      "value": "hdilabs20170914ignite02"
+      "value": "hdilabs20170914ignite01"
     },
     "clusterLoginUserName": {
       "value": "admin"
@@ -28,6 +28,9 @@
     },
     "sshPassword": {
       "value": "Abc!1234567890"
+    },
+    "clusterCount": {
+      "value": 1
     }
   }
 }
