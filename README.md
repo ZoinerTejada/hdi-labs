@@ -12,9 +12,15 @@ AdventureWorks is an e-commerce retailer who is looking to improve how they mana
 
 In the lab you will learn how to use Spark SQL (and PySpark) to batch process a 10GB text file dataset, quickly explore its content, identify issues with the data, clean and format the data and load it into Hive tables to support downstream analytics.
 
-### [Lab 3 - Data Science using Spark](Labs/Lab03/Lab03.md): 
-AdventureWorks would like to add a snazzy product recommendations feature to their website and email marketing campaigns that, for every user in their system, can recommend the top 10 products they might be interested in purchasing. Adventureworks has provided you with the tables for users, products and weblogs that contains all of the data you need. 
+### [Lab 3 - Data Science using Spark](Labs/Lab03/Lab03.md):
+AdventureWorks would like to add a snazzy product recommendations feature to their website and email marketing campaigns that, for every user in their system, can recommend the top 10 products they might be interested in purchasing. Adventureworks has provided you with the tables for users, products and weblogs that contains all of the data you need.
+
 In this lab, you will train a recommendation model using Spark's built-in collaborative filtering alogrithm - Alternating Least Squares (ALS). Then you will use the model to pre-compute the user to product recommendation for every user and save this in a table. Then you will query from this table to quickly get the 10 product recommendations for a given user.
+
+### [Lab 4 - Streaming Pattern: Processing events from Kafka using Spark and MLlib](Labs/Lab04/Lab04.md):
+AdventureWorks has asked for the ability to extend their product recommendations feature, integrating the trained Alternating Least Squares (ALS) recommendation model to make predictions against streaming weblog data from Kafka.
+
+In this lab, you will upload and run a Java .jar application to add sample weblog data into a Kafka topic, and use the same application to view the data added. You will then create a simple Kafka producer using Spark to add a few more records to the topic. Next, you will use Spark Structured Streaming to query the data, and run the streamed data against the ALS recommendation model, getting product recommendations for a given user.
 
 
 ### [Lab 7 - Extending the cluster with HDInsight Applications](Labs/Lab07/Lab07.md):
