@@ -28,6 +28,9 @@
     },
     "sshPassword": {
       "value": "Abc!1234567890"
+    },
+    "clusterCount": {
+      "value": 1
     }
   }
 }

@@ -4,6 +4,7 @@ Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
     [string] [Parameter(Mandatory=$true)] $ClusterName,
     [string] $ResourceGroupName = 'HDInsightLabsEnvironment',
+    [string] $ClusterCount = '1',
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
@@ -111,6 +112,7 @@ else {
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
                                        -clusterName $ClusterName `
+                                       -clusterCount $ClusterCount `
                                        -location $ResourceGroupLocation `
                                        @OptionalParameters `
                                        -Force -Verbose `

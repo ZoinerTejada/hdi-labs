@@ -72,8 +72,15 @@
       "metadata": {
         "description": "The password must be at least 10 characters in length and must contain at least one digit, one non-alphanumeric character, and one upper or lower case letter."
       }
-    }
     },
+    "clusterCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The number of HDInsight clusters to deploy."
+      }
+    }
+  },
   "variables": {
     "defaultApiVersion": "2015-05-01-preview",
     "clusterAttachedStorageName": "[parameters('clusterName')]"
@@ -95,7 +102,11 @@
     },
     {
       "apiVersion": "2015-03-01-preview",
-      "name": "[parameters('clusterName')]",
+      "name": "[concat(parameters('clusterName'), copyIndex())]",
+      "copy": {
+        "name": "hdinsightcopy",
+        "count": "[parameters('clusterCount')]"
+      },
       "type": "Microsoft.HDInsight/clusters",
       "location": "[parameters('location')]",
       "dependsOn": [ "[resourceId('Microsoft.Storage/storageAccounts', variables('clusterAttachedStorageName'))]" ],
@@ -118,7 +129,7 @@
             {
               "name": "[concat(variables('clusterAttachedStorageName'),'.blob.core.windows.net')]",
               "isDefault": true,
-              "container": "hdi-labs",
+              "container": "[concat(parameters('clusterName'), copyIndex())]",
               "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('clusterAttachedStorageName')), variables('defaultApiVersion')).key1]"
             }
           ]
@@ -162,5 +173,5 @@
       }
     }
   ],
-    "outputs": {}
-  }
+  "outputs": {}
+}
