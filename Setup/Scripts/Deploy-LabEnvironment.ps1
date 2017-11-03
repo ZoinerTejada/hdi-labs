@@ -27,8 +27,8 @@ Write-Host("Deploying instances with prefix " + $clusterInstanceName + " in Reso
 Set-Location $sourceFolder
 .\Deploy-AzureResourceGroup.ps1 -ResourceGroupName $resourceGroupInstanceName `
                                 -ResourceGroupLocation $resourceGroupLocation `
-                                -TemplateFile 'azuredeploy.json' `
-                                -TemplateParametersFile 'azuredeploy.parameters.json' `
+                                -TemplateFile 'azuredeploy.all.json' `
+                                -TemplateParametersFile 'azuredeploy.all.parameters.json' `
                                 -ClusterName $clusterInstanceName `
                                 -ClusterCount $clusterCount
 $storageAccountName = $clusterInstanceName
@@ -48,4 +48,5 @@ For($i = 0; $i -lt $clusterCount; $i++){
     $contextSource = New-AzureStorageContext -StorageAccountName $sourceAccountName -SasToken $sourceSAS  
     $contextDest = New-AzureStorageContext -StorageAccountName $storageAccountName -StorageAccountKey $storageKey
     Get-AzureStorageBlob -Context $contextSource -Container $sourceContainer -Blob "*.csv" | Start-AzureStorageBlobCopy -DestContext $contextDest -DestContainer $destContainerName
+    Get-AzureStorageBlob -Context $contextSource -Container $sourceContainer -Blob "*.txt" | Start-AzureStorageBlobCopy -DestContext $contextDest -DestContainer $destContainerName
 }

@@ -7,7 +7,7 @@ This article describes the steps required to setup the environment in order to c
 An ARM template and script is provided to aid in provisioning the clusters for attendees to use. Follow these steps to deploy your cluster:
 
 1. Navigate to the Setup\Scripts folder. 
-2. Open azuredeploy.parameters.json and provide the settings requested. At minimum provide a unique name for the cluster.
+2. Open azuredeploy.all.parameters.json and provide the settings requested. At minimum provide a unique name for the cluster. Enter 'Yes' or 'No' for `provisionSpark`, `provisionLLAP`, and `provisionSecure`. This will specify whether to provision a Spark, Interactive (LLAP), or Domain-Joined (Secure) set of clusters.
 3. Save the file.
 4. Open PowerShell and run the following command to login to your Azure account:
 
@@ -24,7 +24,7 @@ An ARM template and script is provided to aid in provisioning the clusters for a
     For example, the following creates the environment in the East US location, where 2 clusters are created sharing one storage account (each will have its own container in that storage account):
 
     ```
-    .\Deploy-Single.ps1 -subscriptionId "40fc406c-c745-44f0-be2d-63b1c860cde0" -resourceGroupName "HDILabs-01" -clusterName "hdilabs1149" -clusterCount 2
+    .\Deploy-LabEnvironment.ps1 -subscriptionId "40fc406c-c745-44f0-be2d-63b1c860cde0" -resourceGroupName "HDILabs-01" -clusterName "hdilabs1149" -clusterCount 2
     ```
 
     **NOTE:** You may need to relax your PowerShell execution policy to execute this script. To do so, before running the above first run:
