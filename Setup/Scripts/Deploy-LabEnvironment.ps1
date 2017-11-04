@@ -39,6 +39,7 @@ $storageKey = (Get-AzureRmStorageAccountKey -Name $storageAccountName -ResourceG
 # $sourceSAS = "'?sv=2017-04-17&ss=b&srt=co&sp=rl&se=2019-12-31T18:29:33Z&st=2017-09-18T10:29:33Z&spr=https&sig=bw1EJflDFx9NuvLRdBGql8RU%2FC9oz92Dz8Xs76cftJM%3D'"
 $sourceSAS = "?sv=2017-04-17&ss=b&srt=co&sp=rl&se=2019-12-31T18:29:33Z&st=2017-09-18T10:29:33Z&spr=https&sig=bw1EJflDFx9NuvLRdBGql8RU%2FC9oz92Dz8Xs76cftJM%3D"
 
+Write-Host("Beginning file upload to " + $clusterCount + " storage containers. This can take a while.")
 For($i = 0; $i -lt $clusterCount; $i++){
     $destContainerName = $clusterName + $i
     $sourceAccountName = "retaildatasamples"
@@ -50,3 +51,4 @@ For($i = 0; $i -lt $clusterCount; $i++){
     Get-AzureStorageBlob -Context $contextSource -Container $sourceContainer -Blob "*.csv" | Start-AzureStorageBlobCopy -DestContext $contextDest -DestContainer $destContainerName
     Get-AzureStorageBlob -Context $contextSource -Container $sourceContainer -Blob "*.txt" | Start-AzureStorageBlobCopy -DestContext $contextDest -DestContainer $destContainerName
 }
+Write-Host("File upload complete, and deployment operations are finished. If there are no errors, you are free to begin using the clusters.") -ForegroundColor Green

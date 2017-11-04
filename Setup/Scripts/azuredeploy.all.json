@@ -35,6 +35,17 @@
         "description": "Specifies whether to provision an LLAP cluster."
       }
     },
+    "provisionKafka": {
+      "type": "string",
+      "defaultValue": "Yes",
+      "allowedValues": [
+        "Yes",
+        "No"
+      ],
+      "metadata": {
+        "description": "Specifies whether to provision a Kafka cluster."
+      }
+    },
     "provisionSecure": {
       "type": "string",
       "defaultValue": "Yes",
@@ -394,6 +405,11 @@
     "dataBaseCollation": "SQL_Latin1_General_CP1_CI_AS",
     "dataBaseEdition": "Standard",
     "dataBaseRequestedServiceObjectiveName": "S2",
+    // Kafka/Spark vnet variables
+    "clusterVNetName": "[concat(parameters('clusterName'),'-vnet')]",
+    "clusterVNetAddressSpace": "10.0.0.0/16",
+    "clusterVNetSubnetName": "default",
+    "clusterVNetSubnetAddressRange": "10.0.0.0/24",
     // Secure server variables
     "adLBFE": "LBFE",
     "adLBBE": "LBBE",
@@ -526,6 +542,43 @@
       },
       "kind": "Storage"
     },
+    {
+      "name": "[concat(variables('clusterAttachedStorageName'),'kafka')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('location')]",
+      "apiVersion": "2016-01-01",
+      "sku": {
+        "name": "[parameters('clusterAttachedStorageType')]"
+      },
+      "dependsOn": [],
+      "tags": {
+        "displayName": "clusterattachedstorage"
+      },
+      "kind": "Storage"
+    },
+    {
+      "name": "[variables('clusterVNetName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('defaultApiVersion')]",
+      "dependsOn": [ ],
+      "tags": { },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('clusterVNetAddressSpace')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('clusterVNetSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('clusterVNetSubnetAddressRange')]"
+            }
+          }
+        ]
+      }
+    },
     // Spark Cluster
     {
       "apiVersion": "2015-03-01-preview",
@@ -540,7 +593,8 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('clusterAttachedStorageName'))]",
         "[resourceId('Microsoft.Sql/servers', variables('serverName'))]",
-        "[resourceId('Microsoft.Sql/servers/databases', variables('serverName'), concat(variables('dataBaseName'),copyIndex()))]"
+        "[resourceId('Microsoft.Sql/servers/databases', variables('serverName'), concat(variables('dataBaseName'),copyIndex()))]",
+        "[concat('Microsoft.Network/virtualNetworks/',variables('clusterVNetName'))]"
       ],
       "properties": {
         "clusterVersion": "[parameters('clusterVersion')]",
@@ -595,7 +649,10 @@
                   "password": "[parameters('sshPassword')]"
                 }
               },
-              "virtualNetworkProfile": null,
+              "virtualNetworkProfile": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName')), '/subnets/', variables('clusterVNetSubnetName'))]"
+              },
               "scriptActions": []
             },
             {
@@ -611,7 +668,10 @@
                   "password": "[parameters('sshPassword')]"
                 }
               },
-              "virtualNetworkProfile": null,
+              "virtualNetworkProfile": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName')), '/subnets/', variables('clusterVNetSubnetName'))]"
+              },
               "scriptActions": []
             }
           ]
@@ -730,6 +790,110 @@
                   }
               ]
           }
+      }
+    },
+    // Kafka Cluster
+    {
+      "apiVersion": "[variables('clusterApiVersion')]",
+      "location": "[parameters('location')]",
+      "name": "[concat( 'kf', copyIndex(), parameters('clusterName'))]",
+      "condition": "[equals(parameters('provisionKafka'),'Yes')]",
+      "copy": {
+        "name": "hdinsightkafkacopy",
+        "count": "[parameters('clusterCount')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(variables('clusterAttachedStorageName'),'kafka'))]",
+        "[concat('Microsoft.Network/virtualNetworks/',variables('clusterVNetName'))]"
+      ],
+      "type": "Microsoft.HDInsight/clusters",
+      "properties": {
+        "clusterVersion": "[parameters('clusterVersion')]",
+        "osType": "Linux",
+        "tier": "standard",
+        "clusterDefinition": {
+          "kind": "kafka",
+          "configurations": {
+            "gateway": {
+              "restAuthCredential.isEnabled": true,
+              "restAuthCredential.username": "[parameters('clusterLoginUserName')]",
+              "restAuthCredential.password": "[parameters('clusterLoginPassword')]"
+            }
+          }
+        },
+        "storageProfile": {
+          "storageaccounts": [
+            {
+              "name": "[concat(variables('clusterAttachedStorageName'),'kafka','.blob.core.windows.net')]",
+              "isDefault": true,
+              "container": "[concat(parameters('clusterName'), copyIndex())]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(variables('clusterAttachedStorageName'),'kafka')), variables('defaultApiVersion')).key1]"
+            }
+          ]
+        },
+        "computeProfile": {
+          "roles": [
+            {
+              "name": "headnode",
+              "minInstanceCount": 1,
+              "targetInstanceCount": 2,
+              "hardwareProfile": {
+                "vmSize": "Standard_D12_V2"
+              },
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('sshUserName')]",
+                  "password": "[parameters('sshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName')), '/subnets/', variables('clusterVNetSubnetName'))]"
+              }
+            },
+            {
+              "name": "workernode",
+              "minInstanceCount": 1,
+              "targetInstanceCount": 3,
+              "hardwareProfile": {
+                "vmSize": "Standard_D12_V2"
+              },
+              "dataDisksGroups": [
+                {
+                  "disksPerNode": 2
+                }
+              ],
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('sshUserName')]",
+                  "password": "[parameters('sshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName')), '/subnets/', variables('clusterVNetSubnetName'))]"
+              }
+            },
+            {
+              "name": "zookeepernode",
+              "minInstanceCount": 1,
+              "targetInstanceCount": 3,
+              "hardwareProfile": {
+                "vmSize": "Medium"
+              },
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('sshUserName')]",
+                  "password": "[parameters('sshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName')), '/subnets/', variables('clusterVNetSubnetName'))]"
+              }
+            }
+          ]
+        }
       }
     },
     // Secure Cluster and dependencies
@@ -1268,6 +1432,7 @@
         "name": "hdinsightsecurecopy",
         "count": "[parameters('clusterCount')]"
       },
+      "type": "Microsoft.HDInsight/clusters",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', 'UpdateVNetDNS2')]",
         "[resourceId('Microsoft.Storage/storageAccounts', concat(variables('clusterAttachedStorageName'),'dj'))]",
@@ -1275,7 +1440,7 @@
         "[resourceId('Microsoft.Sql/servers/databases', variables('serverName'), concat(variables('dataBaseName'),copyIndex()))]"
       ],
       "properties": {
-        "clusterVersion": "3.6",
+        "clusterVersion": "[parameters('clusterVersion')]",
         "osType": "Linux",
         "tier": "premium",
         "clusterDefinition": {

@@ -6,13 +6,16 @@
       "value": "Yes"
     },
     "provisionLLAP": {
+      "value": "No"
+    },
+    "provisionKafka": {
       "value": "Yes"
     },
     "provisionSecure": {
-      "value": "Yes"
+      "value": "No"
     },
     "clusterName": {
-      "value": "hdilabsjdh"
+      "value": "hdilabs10042017"
     },
     "clusterLoginUserName": {
       "value": "admin"
@@ -21,7 +24,7 @@
       "value": "Abc!1234567890"
     },
     "location": {
-      "value": "westus2"
+      "value": "westus"
     },
     "clusterWorkerNodeCount": {
       "value": 2
