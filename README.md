@@ -27,6 +27,15 @@ AdventureWorks has asked for the ability to extend their product recommendations
 
 In this lab, you will upload and run a Java .jar application to add sample weblog data into a Kafka topic, and use the same application to view the data added. You will then create a simple Kafka producer using Spark to add a few more records to the topic. Next, you will use Spark Structured Streaming to query the data, and run the streamed data against the ALS recommendation model, getting product recommendations for a given user.
 
+### [Lab 5 - Monitoring & Configuration](Labs/Lab05/Lab05.md)
+AdventureWorks would like to monitor the health and performance of their HDInsight cluster, which is essential for maintaining maximum performance and resource utilization. They would like to be able to address possible coding or cluster configuration errors, through monitoring. They are also interested in being proactive with addressing potential issues by being alerted when certain events occur, such as a failing app.
+
+To meet their requirements, you will enable Azure Log Analytics in Operations Manager Suite (OMS) to monitor their cluster's operations. You will demonstrate how to query the cluster's logs for errors or other events, and set up alerts based on those queries. Also, you will use the YARN and Spark UIs to track applications, and use the Spark History Server to view the history of the applications. Finally, you will use Ambari to configure Spark settings.
+
+### [Lab 6: Securing the Environment](Labs/Lab06/Lab06.md)
+AdventureWorks has set up an [Azure Active Directory (AAD)](https://docs.microsoft.com/azure/active-directory/active-directory-whatis) domain, and has added user accounts and roles for employees to use when working with data. They want to make sure that sensitive information, such as user birthdates and passwords, is only accessible to admin-level employees. They have created a [domain-joined HDInsight Spark cluster](https://docs.microsoft.com/azure/hdinsight/hdinsight-domain-joined-configure) within a VNet, and joined to their AAD domain. Now they want to properly set up permissions to restrict access to certain data when users log in to Zeppelin to run queries, or generate reports from this data in Power BI.
+
+Domain-joined HDInsight clusters take advantage of strong authentication with Azure Active Directory users, as well as use role-based access control (RBAC) policies for various services, such as YARN and Hive. In this lab, you will view the users and groups synchronized from AAD in Ambari, use Ranger to control access to Hive tables, as well as configure data masks and row level filters. Finally, you will connect to your cluster's Hive tables in Power BI and observe the permissions being applied there.
 
 ### [Lab 7 - Extending the cluster with HDInsight Applications](Labs/Lab07/Lab07.md):
 AdventureWorks is interested in using HDInsight applications for extending the capabilities their cluster. They are interested in two applications, H2O Sparkling Water and Apache Solr. H2O will provide machine learning and predictive analytics, while Solr will provide enterprise search capabilities.
