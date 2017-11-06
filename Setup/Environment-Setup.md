@@ -7,7 +7,14 @@ This article describes the steps required to setup the environment in order to c
 An ARM template and script is provided to aid in provisioning the clusters for attendees to use. Follow these steps to deploy your cluster:
 
 1. Navigate to the Setup\Scripts folder. 
-2. Open azuredeploy.all.parameters.json and provide the settings requested. At minimum provide a unique name for the cluster. Enter 'Yes' or 'No' for `provisionSpark`, `provisionLLAP`, `provisionKafka', and `provisionSecure`. This will specify whether to provision a Spark, Interactive (LLAP), Kafka, or Domain-Joined (Secure) set of clusters.
+2. Open azuredeploy.all.parameters.json and provide the settings requested. At minimum provide a unique name for the cluster. Enter 'Yes' or 'No' for `provisionSpark`, `provisionLLAP`, `provisionKafka', and `provisionSecure`. This will specify whether to provision a Spark, Interactive (LLAP), Kafka, or Domain-Joined (Secure) set of clusters. Here are the types of clusters each lab requires:
+    1. Lab01: Spark
+    2. Lab02: Spark, LLAP
+    3. Lab03: Spark
+    4. Lab04: Spark, Kafka
+    5. Lab05: Spark
+    6: Lab06: Spark, Domain-Joined (Secure)
+    7: Lab07: Spark
 3. Save the file.
 4. Open PowerShell and run the following command to login to your Azure account:
 
